@@ -2,6 +2,13 @@
 #include <math.h>
 #include "uwnet.h"
 
+double max(double x, double y) {
+    return (x>y)?x:y;
+}
+double min(double x, double y) {
+    return (x<y)?x:y;
+}
+
 // Run an activation function on each element in a matrix,
 // modifies the matrix in place
 // matrix m: Input to activation function
@@ -15,20 +22,22 @@ void activate_matrix(matrix m, ACTIVATION a)
             double x = m.data[i*m.cols + j];
             float x2 = 0.0;
             if(a == LOGISTIC){
-                x2 = x*(1-x);
+                x2 = exp(x)/(1+ exp(-x));
             } else if (a == RELU){
                 x2 = max(0.0, x);
             } else if (a == LRELU){
                 x2 = max(0.0, x);
             } else if (a == SOFTMAX){
-                x2 = exp(-x)*exp(1-x);
+                x2 = x*(1-x);
             }
             sum += m.data[i*m.cols + j];
 
         }
-        if (a == SOFTMAX) {
 
-        }
+        if (a == SOFTMAX) {
+                x2 = max(x, 0.0);
+                x2 = min(x, 1.0)
+                        }
         m.data[i*m.cos+j] = x2;
     }
 }
